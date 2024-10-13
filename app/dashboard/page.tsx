@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import styles from "./style.module.scss";
 import LightBulb from "@/components/ui/LightBulb";
-
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 const light_btns_left: number = 8;
 const light_btns_right: number = 8;
 
@@ -11,6 +12,7 @@ const Dashboard = () => {
   const [activeButtons, setActiveButtons] = useState<number[]>([]);
   const [formatButton, setFormatButton] = useState(false);
   const [activeModal, setActiveModal] = useState(false);
+  const router = useRouter()
   const handleButtonClick = (i: number) => {
     if (activeButtons.includes(i)) {
       setActiveButtons(activeButtons.filter((btn) => btn !== i));
@@ -27,8 +29,19 @@ const Dashboard = () => {
       <div className="container">
         <div className={styles["floor_plan"]}>
           {activeModal && (
-            <div className={styles["image_modal"]} onClick={() => setActiveModal(false)}>
-              <img src={"/images/mikroplan.png"} alt="micro plan" onClick={(e) => e.stopPropagation()}/>
+           
+            <div
+              className={styles["image_modal"]}
+              onClick={() => setActiveModal(false)}
+            >
+                <img
+                  src={"/images/mikroplan.png"}
+                  alt="micro plan"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    router.push("https://platform.maket.ai/shared/floorplan-designs/YYt1bQuRML")
+                  }}
+                />
             </div>
           )}
 
