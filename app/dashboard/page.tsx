@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import styles from "./style.module.scss";
 import LightBulb from "@/components/ui/LightBulb";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 const light_btns_left: number = 8;
 const light_btns_right: number = 8;
