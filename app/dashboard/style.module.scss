@@ -6,6 +6,32 @@
   align-items: center;
   .floor_plan {
     position: relative;
+    .format_btns {
+      position: absolute;
+      right: 0;
+      display: flex;
+      gap: 10px;
+      button {
+        border: 1px solid;
+        border-radius: 5px;
+        padding: 2px 10px;
+      }
+      button:hover {
+        background-color: #f0f0f09d;
+        color: #737373;
+        border: 1px solid #737373;
+      }
+      .active {
+        background-color: black;
+        color: #f1f0ec;
+        border: none;
+      }
+      .active:hover{
+        background-color: black;
+        color: #f1f0ec;
+        border: none;
+      }
+    }
     img {
       background-size: contain;
       width: 100%;
@@ -21,7 +47,8 @@
       width: 52%;
       height: 40%;
       display: flex;
-      gap: 70px;
+      gap: 90px;
+      
       .light_btns_sides {
         width: 50%;
         display: grid;
@@ -45,9 +72,16 @@
         }
 
         .active {
-          box-shadow: 0 0 10px #e5ff0099,
-            0 0 20px #fbff0099, 0 0 30px #f2ff0099;
+          box-shadow: 0 0 10px #e5ff0099, 0 0 20px #fbff0099, 0 0 30px #f2ff0099;
         }
+      }
+      .plan2{
+        row-gap: 60px;
+      }
+      .plan3{
+        padding-top: 20px;
+        row-gap: 70px;
+
       }
     }
   }

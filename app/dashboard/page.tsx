@@ -9,6 +9,7 @@ const light_btns_right: number = 8;
 const Dashboard = () => {
   const [hoveredButton, setHoveredButton] = useState<number | null>(null);
   const [activeButtons, setActiveButtons] = useState<number[]>([]);
+  const [formatButton, setFormatButton] = useState(false)
   const handleButtonClick = (i: number) => {
     if (activeButtons.includes(i)) {
       setActiveButtons(activeButtons.filter((btn) => btn !== i));
@@ -16,13 +17,20 @@ const Dashboard = () => {
       setActiveButtons([...activeButtons, i]);
     }
   };
+  const formatClick = (f:boolean) => {
+    setFormatButton(f)
+  }
   return (
     <div id={styles["dashboard"]}>
       <div className="container">
         <div className={styles["floor_plan"]}>
-          <img src={"/images/floorplan.png"} alt="floor plan" />
-          <div className={styles["light_btns"]}>
-            <div className={styles["light_btns_sides"]}>
+            <div className={styles["format_btns"]}>
+            <button onClick={()=>formatClick(false)} className={styles[`${!formatButton && "active"}`]}>2D</button>
+            <button onClick={()=>formatClick(true)} className={styles[`${formatButton && "active"}`]}>3D</button>
+            </div>
+          <img src={formatButton ? "/images/floorplan2.png" : "/images/floorplan.png"} alt="floor plan" />
+          <div className={styles["light_btns"]} style={{ left: formatButton ? '40%' : '36%'}}>
+            <div className={`${styles["light_btns_sides"]} ${formatButton && styles["plan2"]}`}>
               {Array.from({ length: light_btns_left }, (_, i) => (
                 <button
                   key={i}
@@ -40,7 +48,7 @@ const Dashboard = () => {
                 </button>
               ))}
             </div>
-            <div className={styles["light_btns_sides"]}>
+            <div className={`${styles["light_btns_sides"]} ${formatButton && styles["plan3"]}`}>
               {Array.from({ length: light_btns_right }, (_, i) => (
                 <button
                   key={i + light_btns_left}
