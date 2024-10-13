@@ -6,6 +6,37 @@
   align-items: center;
   .floor_plan {
     position: relative;
+    .image_modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      img {
+        max-width: 80%;
+        max-height: 80%;
+        object-fit: contain;
+        border-radius: 10px;
+      }
+    }
+    .micro_plan {
+      position: absolute;
+      bottom: 2%;
+      left: 10%;
+      width: 360px;
+      height: 230px;
+      border-radius: 70px 0 70px 0;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
     .format_btns {
       position: absolute;
       right: 0;
@@ -26,7 +57,7 @@
         color: #f1f0ec;
         border: none;
       }
-      .active:hover{
+      .active:hover {
         background-color: black;
         color: #f1f0ec;
         border: none;
@@ -48,7 +79,7 @@
       height: 40%;
       display: flex;
       gap: 90px;
-      
+
       .light_btns_sides {
         width: 50%;
         display: grid;
@@ -75,13 +106,12 @@
           box-shadow: 0 0 10px #e5ff0099, 0 0 20px #fbff0099, 0 0 30px #f2ff0099;
         }
       }
-      .plan2{
+      .plan2 {
         row-gap: 60px;
       }
-      .plan3{
+      .plan3 {
         padding-top: 20px;
         row-gap: 70px;
-
       }
     }
   }
