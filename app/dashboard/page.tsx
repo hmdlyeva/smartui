@@ -1,8 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./style.module.scss";
 import LightBulb from "@/components/ui/LightBulb";
 import { useRouter } from "next/navigation";
+import { RootState } from "@/redux/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { getLightData, Light } from "@/redux/slice/light/light";
 const light_btns_left: number = 8;
 const light_btns_right: number = 8;
 
@@ -22,6 +25,26 @@ const Dashboard = () => {
   const formatClick = (f: boolean) => {
     setFormatButton(f);
   };
+  const dispatch = useDispatch()
+
+  const light = useSelector((state: RootState) => state.lights.lights)
+  const [lightData, setLightData] = useState<Light[]>({
+    ...light,
+  });
+  useEffect(() => {
+    dispatch(getLightData(1));
+  }, [dispatch]);
+  
+  useEffect(() => {
+    setLightData(light);
+  }, [light]);
+  
+
+  console.log(lightData)
+  // const handleGetLights = () => {
+
+  // }
+
 
   return (
     <div id={styles["dashboard"]}>
