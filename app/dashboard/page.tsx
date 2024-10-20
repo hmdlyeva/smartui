@@ -6,9 +6,12 @@ import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getLightData, Light, patchLightData } from "@/redux/slice/light/light";
+import { getWaterData, patchWaterData, Water } from "@/redux/slice/water/water";
+import WaterIcon from "@/components/ui/WaterIcon";
 
 const Dashboard = () => {
   const [hoveredButton, setHoveredButton] = useState<number | null>(null);
+  const [hoveredWater, setHoveredWater] = useState<number | null>(null);
   const [formatButton, setFormatButton] = useState(false);
   const [activeModal, setActiveModal] = useState(false);
   const router = useRouter();
@@ -19,14 +22,20 @@ const Dashboard = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const lightsData = useSelector((state: RootState) => state.lights.lights);
+  const watersData = useSelector((state: RootState) => state.waters.waters);
   const [allLightData, setAllLightData] = useState<Light[]>([]);
+  const [allWaterData, setAllWaterData] = useState<Light[]>([]);
   useEffect(() => {
     dispatch(getLightData());
+    dispatch(getWaterData());
   }, [dispatch]);
 
   useEffect(() => {
     setAllLightData(lightsData);
   }, [lightsData]);
+  useEffect(() => {
+    setAllWaterData(watersData);
+  }, [watersData]);
 
   const handleButtonClick = (i: number) => {
     const clickedLight: any = allLightData.find((light) => light.id == i);
@@ -46,11 +55,28 @@ const Dashboard = () => {
       );
     }
   };
+  const handleWaterClick = (i: number) => {
+    const clickedWater: any = allWaterData.find((water) => water.id == i);
+    if (clickedWater.status === "on") {
+      dispatch(patchWaterData({ id: i, newData: { status: "off" } }));
+      setAllWaterData(
+        allWaterData.map((water) =>
+          water.id === i ? { ...water, status: "off" } : water
+        )
+      );
+    } else {
+      dispatch(patchWaterData({ id: i, newData: { status: "on" } }));
+      setAllWaterData(
+        allWaterData.map((water) =>
+          water.id === i ? { ...water, status: "on" } : water
+        )
+      );
+    }
+  };
 
   const halfIndex = Math.ceil(allLightData.length / 2);
   const firstHalf = allLightData.slice(0, halfIndex);
   const secondHalf = allLightData.slice(halfIndex);
-
 
   console.log(allLightData);
 
@@ -75,7 +101,6 @@ const Dashboard = () => {
               />
             </div>
           )}
-
           {formatButton && (
             <div
               className={styles["micro_plan"]}
@@ -84,7 +109,6 @@ const Dashboard = () => {
               <img src={"/images/mikroplan.png"} alt="micro plan" />
             </div>
           )}
-
           <div className={styles["format_btns"]}>
             <button
               onClick={() => formatClick(false)}
@@ -105,10 +129,35 @@ const Dashboard = () => {
             }
             alt="floor plan"
           />
+
           <div
-            className={styles["light_btns"]}
-            style={{ left: formatButton ? "40%" : "36%" }}
+            className={styles["all_btns"]}
+            style={{ left: formatButton ? "39%" : "36%" }}
           >
+            <div
+              className={styles["water_btns_sides"]}
+              style={{
+                top: formatButton ? "-54px" : "7px",
+                left: formatButton ? "-8%" : "-5%",
+              }}
+            >
+              {allWaterData?.map((water: Water, i: number) => (
+                <button
+                  key={water.id}
+                  className={`${styles["water_btn"]} ${
+                    hoveredWater === water.id ? styles["hover"] : ""
+                  } ${water.status === "on" ? styles["active"] : ""}`}
+                  onMouseEnter={() => setHoveredWater(water.id)}
+                  onMouseLeave={() => setHoveredWater(null)}
+                  onClick={() => handleWaterClick(water.id)}
+                >
+                  <WaterIcon
+                    hover={hoveredWater === water.id}
+                    active={water.status === "on"}
+                  />
+                </button>
+              ))}
+            </div>
             <div
               className={`${styles["light_btns_sides"]} ${
                 formatButton && styles["plan2"]
@@ -131,6 +180,7 @@ const Dashboard = () => {
                 </button>
               ))}
             </div>
+
             <div
               className={`${styles["light_btns_sides"]} ${
                 formatButton && styles["plan3"]

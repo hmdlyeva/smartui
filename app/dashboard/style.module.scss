@@ -68,7 +68,7 @@
       width: 100%;
       height: 90vh;
     }
-    .light_btns {
+    .all_btns {
       position: absolute;
       left: 36%;
       @include xxl_desktop {
@@ -78,8 +78,31 @@
       width: 52%;
       height: 40%;
       display: flex;
-      gap: 90px;
+      gap: 50px;
+      .water_btns_sides {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        row-gap: 3px;
+        button {
+          background-color: #000;
+          width: 25px;
+          height: 25px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: box-shadow 0.1s ease-in-out;
+        }
+        .hover {
+          box-shadow: 0 0 10px rgba(255, 0, 0, 0.6),
+            0 0 20px rgba(255, 0, 0, 0.5), 0 0 30px rgba(255, 0, 0, 0.4);
+        }
 
+        .active {
+          box-shadow: 0 0 10px #00d0ff99, 0 0 20px #0084ff99, 0 0 30px #008cff99;
+        }
+      }
       .light_btns_sides {
         width: 50%;
         display: grid;
