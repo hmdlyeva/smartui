@@ -3,67 +3,76 @@ import React, { useEffect, useState } from "react";
 import styles from "./style.module.scss";
 import LightBulb from "@/components/ui/LightBulb";
 import { useRouter } from "next/navigation";
-import { RootState } from "@/redux/store/store";
+import { AppDispatch, RootState } from "@/redux/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { getLightData, Light } from "@/redux/slice/light/light";
-const light_btns_left: number = 8;
-const light_btns_right: number = 8;
+import { getLightData, Light, patchLightData } from "@/redux/slice/light/light";
 
 const Dashboard = () => {
   const [hoveredButton, setHoveredButton] = useState<number | null>(null);
-  const [activeButtons, setActiveButtons] = useState<number[]>([]);
   const [formatButton, setFormatButton] = useState(false);
   const [activeModal, setActiveModal] = useState(false);
-  const router = useRouter()
-  const handleButtonClick = (i: number) => {
-    if (activeButtons.includes(i)) {
-      setActiveButtons(activeButtons.filter((btn) => btn !== i));
-    } else {
-      setActiveButtons([...activeButtons, i]);
-    }
-  };
+  const router = useRouter();
+
   const formatClick = (f: boolean) => {
     setFormatButton(f);
   };
-  const dispatch = useDispatch()
+  const dispatch: AppDispatch = useDispatch();
 
-  const light = useSelector((state: RootState) => state.lights.lights)
-  const [lightData, setLightData] = useState<Light[]>({
-    ...light,
-  });
+  const lightsData = useSelector((state: RootState) => state.lights.lights);
+  const [allLightData, setAllLightData] = useState<Light[]>([]);
   useEffect(() => {
-    dispatch(getLightData(1));
+    dispatch(getLightData());
   }, [dispatch]);
-  
+
   useEffect(() => {
-    setLightData(light);
-  }, [light]);
-  
+    setAllLightData(lightsData);
+  }, [lightsData]);
 
-  console.log(lightData)
-  // const handleGetLights = () => {
+  const handleButtonClick = (i: number) => {
+    const clickedLight: any = allLightData.find((light) => light.id == i);
+    if (clickedLight.status === "on") {
+      dispatch(patchLightData({ id: i, newData: { status: "off" } }));
+      setAllLightData(
+        allLightData.map((light) =>
+          light.id === i ? { ...light, status: "off" } : light
+        )
+      );
+    } else {
+      dispatch(patchLightData({ id: i, newData: { status: "on" } }));
+      setAllLightData(
+        allLightData.map((light) =>
+          light.id === i ? { ...light, status: "on" } : light
+        )
+      );
+    }
+  };
 
-  // }
+  const halfIndex = Math.ceil(allLightData.length / 2);
+  const firstHalf = allLightData.slice(0, halfIndex);
+  const secondHalf = allLightData.slice(halfIndex);
 
+
+  console.log(allLightData);
 
   return (
     <div id={styles["dashboard"]}>
       <div className="container">
         <div className={styles["floor_plan"]}>
           {activeModal && (
-           
             <div
               className={styles["image_modal"]}
               onClick={() => setActiveModal(false)}
             >
-                <img
-                  src={"/images/mikroplan.png"}
-                  alt="micro plan"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    router.push("https://platform.maket.ai/shared/floorplan-designs/YYt1bQuRML")
-                  }}
-                />
+              <img
+                src={"/images/mikroplan.png"}
+                alt="micro plan"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  router.push(
+                    "https://platform.maket.ai/shared/floorplan-designs/YYt1bQuRML"
+                  );
+                }}
+              />
             </div>
           )}
 
@@ -105,19 +114,19 @@ const Dashboard = () => {
                 formatButton && styles["plan2"]
               }`}
             >
-              {Array.from({ length: light_btns_left }, (_, i) => (
+              {firstHalf?.map((light: Light) => (
                 <button
-                  key={i}
+                  key={light.id}
                   className={`${styles["light_btn"]} ${
-                    hoveredButton === i ? styles["hover"] : ""
-                  } ${activeButtons.includes(i) ? styles["active"] : ""}`}
-                  onMouseEnter={() => setHoveredButton(i)}
+                    hoveredButton === light.id ? styles["hover"] : ""
+                  } ${light.status === "on" ? styles["active"] : ""}`}
+                  onMouseEnter={() => setHoveredButton(light.id)}
                   onMouseLeave={() => setHoveredButton(null)}
-                  onClick={() => handleButtonClick(i)}
+                  onClick={() => handleButtonClick(light.id)}
                 >
                   <LightBulb
-                    hover={hoveredButton === i}
-                    active={activeButtons.includes(i)}
+                    hover={hoveredButton === light.id}
+                    active={light.status === "on"}
                   />
                 </button>
               ))}
@@ -127,23 +136,19 @@ const Dashboard = () => {
                 formatButton && styles["plan3"]
               }`}
             >
-              {Array.from({ length: light_btns_right }, (_, i) => (
+              {secondHalf?.map((light: Light) => (
                 <button
-                  key={i + light_btns_left}
+                  key={light.id}
                   className={`${styles["light_btn"]} ${
-                    hoveredButton === i + light_btns_left ? styles["hover"] : ""
-                  } ${
-                    activeButtons.includes(i + light_btns_left)
-                      ? styles["active"]
-                      : ""
-                  }`}
-                  onMouseEnter={() => setHoveredButton(i + light_btns_left)}
+                    hoveredButton === light.id ? styles["hover"] : ""
+                  } ${light.status === "on" ? styles["active"] : ""}`}
+                  onMouseEnter={() => setHoveredButton(light.id)}
                   onMouseLeave={() => setHoveredButton(null)}
-                  onClick={() => handleButtonClick(i + light_btns_left)}
+                  onClick={() => handleButtonClick(light.id)}
                 >
                   <LightBulb
-                    hover={hoveredButton === i + light_btns_left}
-                    active={activeButtons.includes(i + light_btns_left)}
+                    hover={hoveredButton === light.id}
+                    active={light.status === "on"}
                   />
                 </button>
               ))}
