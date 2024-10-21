@@ -38,7 +38,8 @@ const Dashboard = () => {
   }, [watersData]);
 
   const handleButtonClick = (i: number) => {
-    const clickedLight: any = allLightData.find((light) => light.id == i);
+    const clickedLight = allLightData.find((light) => light.id == i);
+    if (clickedLight) {
     if (clickedLight.status === "on") {
       dispatch(patchLightData({ id: i, newData: { status: "off" } }));
       setAllLightData(
@@ -54,9 +55,11 @@ const Dashboard = () => {
         )
       );
     }
+  }
   };
   const handleWaterClick = (i: number) => {
-    const clickedWater: any = allWaterData.find((water) => water.id == i);
+    const clickedWater = allWaterData.find((water) => water.id == i);
+    if (clickedWater) {
     if (clickedWater.status === "on") {
       dispatch(patchWaterData({ id: i, newData: { status: "off" } }));
       setAllWaterData(
@@ -72,6 +75,7 @@ const Dashboard = () => {
         )
       );
     }
+  }
   };
 
   const halfIndex = Math.ceil(allLightData.length / 2);
@@ -141,7 +145,7 @@ const Dashboard = () => {
                 left: formatButton ? "-8%" : "-5%",
               }}
             >
-              {allWaterData?.map((water: Water, i: number) => (
+              {allWaterData?.map((water: Water) => (
                 <button
                   key={water.id}
                   className={`${styles["water_btn"]} ${
