@@ -40,18 +40,18 @@ const Dashboard = () => {
   const handleButtonClick = (i: number) => {
     const clickedLight = allLightData.find((light) => light.id == i);
     if (clickedLight) {
-    if (clickedLight.status === "on") {
-      dispatch(patchLightData({ id: i, newData: { status: "off" } }));
+    if (clickedLight.status === "true") {
+      dispatch(patchLightData({ id: i, newData: { status: "false" } }));
       setAllLightData(
         allLightData.map((light) =>
-          light.id === i ? { ...light, status: "off" } : light
+          light.id === i ? { ...light, status: "false" } : light
         )
       );
     } else {
-      dispatch(patchLightData({ id: i, newData: { status: "on" } }));
+      dispatch(patchLightData({ id: i, newData: { status: "true" } }));
       setAllLightData(
         allLightData.map((light) =>
-          light.id === i ? { ...light, status: "on" } : light
+          light.id === i ? { ...light, status: "true" } : light
         )
       );
     }
@@ -60,18 +60,18 @@ const Dashboard = () => {
   const handleWaterClick = (i: number) => {
     const clickedWater = allWaterData.find((water) => water.id == i);
     if (clickedWater) {
-    if (clickedWater.status === "on") {
-      dispatch(patchWaterData({ id: i, newData: { status: "off" } }));
+    if (clickedWater.status === "true") {
+      dispatch(patchWaterData({ id: i, newData: { status: "false" } }));
       setAllWaterData(
         allWaterData.map((water) =>
-          water.id === i ? { ...water, status: "off" } : water
+          water.id === i ? { ...water, status: "false" } : water
         )
       );
     } else {
-      dispatch(patchWaterData({ id: i, newData: { status: "on" } }));
+      dispatch(patchWaterData({ id: i, newData: { status: "true" } }));
       setAllWaterData(
         allWaterData.map((water) =>
-          water.id === i ? { ...water, status: "on" } : water
+          water.id === i ? { ...water, status: "true" } : water
         )
       );
     }
@@ -150,14 +150,14 @@ const Dashboard = () => {
                   key={water.id}
                   className={`${styles["water_btn"]} ${
                     hoveredWater === water.id ? styles["hover"] : ""
-                  } ${water.status === "on" ? styles["active"] : ""}`}
+                  } ${water.status === "true" ? styles["active"] : ""}`}
                   onMouseEnter={() => setHoveredWater(water.id)}
                   onMouseLeave={() => setHoveredWater(null)}
                   onClick={() => handleWaterClick(water.id)}
                 >
                   <WaterIcon
                     hover={hoveredWater === water.id}
-                    active={water.status === "on"}
+                    active={water.status === "true"}
                   />
                 </button>
               ))}
@@ -172,14 +172,14 @@ const Dashboard = () => {
                   key={light.id}
                   className={`${styles["light_btn"]} ${
                     hoveredButton === light.id ? styles["hover"] : ""
-                  } ${light.status === "on" ? styles["active"] : ""}`}
+                  } ${light.status === "true" ? styles["active"] : ""}`}
                   onMouseEnter={() => setHoveredButton(light.id)}
                   onMouseLeave={() => setHoveredButton(null)}
                   onClick={() => handleButtonClick(light.id)}
                 >
                   <LightBulb
                     hover={hoveredButton === light.id}
-                    active={light.status === "on"}
+                    active={light.status === "true"}
                   />
                 </button>
               ))}
@@ -195,14 +195,14 @@ const Dashboard = () => {
                   key={light.id}
                   className={`${styles["light_btn"]} ${
                     hoveredButton === light.id ? styles["hover"] : ""
-                  } ${light.status === "on" ? styles["active"] : ""}`}
+                  } ${light.status === "true" ? styles["active"] : ""}`}
                   onMouseEnter={() => setHoveredButton(light.id)}
                   onMouseLeave={() => setHoveredButton(null)}
                   onClick={() => handleButtonClick(light.id)}
                 >
                   <LightBulb
                     hover={hoveredButton === light.id}
-                    active={light.status === "on"}
+                    active={light.status === "true"}
                   />
                 </button>
               ))}
